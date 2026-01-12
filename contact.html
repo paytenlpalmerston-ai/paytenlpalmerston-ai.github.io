@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; connect-src 'self' https://formspree.io;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roome 3D - Contact Us</title>
@@ -600,18 +601,36 @@
             z-index: 2;
         }
 
-        .footer-note {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(45, 62, 80, 0.9);
-            border: 2px solid #748da4;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: #c2caa8;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        .setup-notice {
+            background: rgba(255, 243, 205, 0.95);
+            border: 2px solid #ff9800;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .setup-notice strong {
+            color: #e65100;
+            font-size: 1.1rem;
+        }
+
+        .setup-notice p {
+            margin-top: 0.5rem;
+            color: #2d3e50;
+            line-height: 1.6;
+        }
+
+        .setup-notice a {
+            color: #0066cc;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .setup-notice a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
@@ -678,7 +697,8 @@
             <!-- Contact Form -->
             <div class="contact-form-section">
                 <h2 class="form-title">Send Us a Message</h2>
-                <form id="contactForm">
+                
+                <form id="contactForm" action="https://formspree.io/f/mqeekqlo" method="POST">
                     <div class="form-group">
                         <label for="name">Your Name</label>
                         <input type="text" id="name" name="name" placeholder="John Doe" required>
@@ -808,8 +828,6 @@
         </div>
     </div>
 
-    
-
     <script>
         function createShape() {
             const shapesContainer = document.getElementById('shapesContainer');
@@ -836,6 +854,8 @@
         }
         setInterval(createShape, 4000);
 
+        
+
         const promoMessages = [
             '📞 24/7 SUPPORT AVAILABLE - WE\'RE HERE TO HELP',
             '💬 LIVE CHAT SUPPORT NOW ONLINE',
@@ -857,17 +877,11 @@
 
         setInterval(rotatePromo, 4000);
 
-        // Form submission handler
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Show success message (in a real site, this would send the data)
-            alert('Thank you for your message! We\'ll get back to you within 24 hours.');
-            
-            // Reset form
-            this.reset();
-        });
+         document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your message! We will contact you soon at ' + document.getElementById('email').value);
+    });
+
     </script>
 </body>
 </html>
-

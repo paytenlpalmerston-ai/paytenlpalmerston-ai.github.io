@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - Roome 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+            background: #0f1419;
+            color: #2c2c2c;
+        }
+
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d3e50 0%, #748da4 50%, #c2caa8 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+        }
+
+        header {
+            background: rgba(45, 62, 80, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1.5rem 3rem;
+            border-bottom: 3px solid #748da4;
+            animation: slideDown 0.8s ease-out;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 100;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .logo-graphic {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover .logo-graphic {
+            color: #eac8ab;
+            transform: scale(1.02);
+        }
+
+        .logo-text {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #c2caa8;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: #c2caa8;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #eac8ab;
+            transform: translateY(-2px);
+        }
+
+        .promo-banner {
+            background: #eac8ab;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 3px solid #748da4;
+            position: relative;
+            z-index: 99;
+        }
+
+        .promo-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2d3e50;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem 8rem 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2d3e50;
+            line-height: 1.1;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #2d3e50;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .search-bar-container {
+            max-width: 700px;
+            margin: 2rem auto 3rem;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1.5rem 4rem 1.5rem 2rem;
+            background: rgba(230, 240, 250, 0.95);
+            border: 3px solid #748da4;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            color: #2d3e50;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #2d3e50;
+            background: rgba(240, 250, 255, 0.95);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #748da4;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .category-card {
+            background: rgba(230, 240, 250, 0.95);
+            border: 3px solid #748da4;
+            border-radius: 12px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 200, 171, 0.3), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .category-card:hover::before {
+            left: 100%;
+        }
+
+        .category-card:hover {
+            border-color: #2d3e50;
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-count {
+            color: #748da4;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .articles-section {
+            margin-top: 3rem;
+        }
+
+        .section-header {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #748da4;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .articles-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .article-item {
+            background: rgba(230, 240, 250, 0.95);
+            border: 2px solid #748da4;
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 200, 171, 0.2), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .article-item:hover::before {
+            left: 100%;
+        }
+
+        .article-item:hover {
+            border-color: #2d3e50;
+            transform: translateX(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .article-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .article-description {
+            color: #2d3e50;
+            line-height: 1.6;
+            font-size: 1rem;
+            opacity: 0.8;
+            position: relative;
+            z-index: 2;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            color: #748da4;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(230, 240, 250, 0.98);
+            border: 3px solid #748da4;
+            border-radius: 15px;
+            padding: 3rem;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            color: #2d3e50;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(116, 141, 164, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(116, 141, 164, 0.4);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 1.5rem;
+            padding-right: 3rem;
+        }
+
+        .modal-body {
+            color: #2d3e50;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .modal-body h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: #2d3e50;
+        }
+
+        .modal-body p {
+            margin-bottom: 1rem;
+        }
+
+        .modal-body ul, .modal-body ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-cta {
+            background: rgba(234, 200, 171, 0.3);
+            border: 2px solid #eac8ab;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .contact-cta-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 1rem;
+        }
+
+        .contact-cta-text {
+            color: #2d3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-btn {
+            padding: 1rem 2.5rem;
+            background: #2d3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .contact-btn:hover {
+            background: #1a2633;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .modal-content {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+                max-height: 90vh;
+            }
+
+            header {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="grain-overlay"></div>
+
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-container">
+                <div class="logo-graphic">ROOME 3D</div>
+                <div class="logo-text">Security is No Accident</div>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </header>
+
+    <div class="promo-banner">
+        <div class="promo-text">📚 HELP CENTER - FIND ANSWERS INSTANTLY</div>
+    </div>
+
+    <div class="main-content">
+        <div class="hero-section">
+            <h1>Help Center</h1>
+            <p class="subtitle">Search our knowledge base or browse categories to find the help you need</p>
+        </div>
+
+        <div class="search-bar-container">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search for help articles...">
+            <div class="search-icon">🔍</div>
+        </div>
+
+        <div class="categories-grid">
+            <div class="category-card" data-category="getting-started">
+                <div class="category-icon">🚀</div>
+                <div class="category-title">Getting Started</div>
+                <div class="category-count">12 articles</div>
+            </div>
+
+            <div class="category-card" data-category="installation">
+                <div class="category-icon">🔧</div>
+                <div class="category-title">Installation</div>
+                <div class="category-count">8 articles</div>
+            </div>
+
+            <div class="category-card" data-category="troubleshooting">
+                <div class="category-icon">⚙️</div>
+                <div class="category-title">Troubleshooting</div>
+                <div class="category-count">15 articles</div>
+            </div>
+
+            <div class="category-card" data-category="account">
+                <div class="category-icon">👤</div>
+                <div class="category-title">Account & Billing</div>
+                <div class="category-count">10 articles</div>
+            </div>
+
+            <div class="category-card" data-category="claims">
+                <div class="category-icon">📋</div>
+                <div class="category-title">Claims Process</div>
+                <div class="category-count">7 articles</div>
+            </div>
+
+            <div class="category-card" data-category="features">
+                <div class="category-icon">✨</div>
+                <div class="category-title">Features</div>
+                <div class="category-count">14 articles</div>
+            </div>
+        </div>
+
+        <div class="articles-section">
+            <h2 class="section-header">Popular Articles</h2>
+            <div class="articles-list" id="articlesList">
+                <div class="article-item" data-article="setup">
+                    <div class="article-title">How to Set Up Your Roome 3D System</div>
+                    <div class="article-description">Step-by-step guide to getting your security system up and running in minutes.</div>
+                    <div class="article-meta">
+                        <span>📖 5 min read</span>
+                        <span>👁️ 2,453 views</span>
+                    </div>
+                </div>
+
+                <div class="article-item" data-article="mobile-app">
+                    <div class="article-title">Using the Roome 3D Mobile App</div>
+                    <div class="article-description">Learn how to monitor and control your security system from anywhere using our mobile app.</div>
+                    <div class="article-meta">
+                        <span>📖 7 min read</span>
+                        <span>👁️ 1,892 views</span>
+                    </div>
+                </div>
+
+                <div class="article-item" data-article="alerts">
+                    <div class="article-title">Understanding Alert Notifications</div>
+                    <div class="article-description">Configure and customize your alert preferences to stay informed about what matters most.</div>
+                    <div class="article-meta">
+                        <span>📖 4 min read</span>
+                        <span>👁️ 1,654 views</span>
+                    </div>
+                </div>
+
+                <div class="article-item" data-article="connectivity">
+                    <div class="article-title">Troubleshooting Connectivity Issues</div>
+                    <div class="article-description">Quick fixes for common WiFi and network connectivity problems with your system.</div>
+                    <div class="article-meta">
+                        <span>📖 6 min read</span>
+                        <span>👁️ 1,432 views</span>
+                    </div>
+                </div>
+
+                <div class="article-item" data-article="battery">
+                    <div class="article-title">Battery Backup and Power Management</div>
+                    <div class="article-description">Everything you need to know about keeping your system powered during outages.</div>
+                    <div class="article-meta">
+                        <span>📖 5 min read</span>
+                        <span>👁️ 1,245 views</span>
+                    </div>
+                </div>
+
+                <div class="article-item" data-article="zones">
+                    <div class="article-title">Creating and Managing Security Zones</div>
+                    <div class="article-description">Set up custom security zones for different areas of your property for enhanced protection.</div>
+                    <div class="article-meta">
+                        <span>📖 8 min read</span>
+                        <span>👁️ 987 views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-cta">
+            <div class="contact-cta-title">Can't Find What You're Looking For?</div>
+            <div class="contact-cta-text">Our support team is here to help. Reach out and we'll get back to you as soon as possible.</div>
+            <a href="contact.html" class="contact-btn">Contact Support</a>
+        </div>
+    </div>
+
+    <!-- Article Modal -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <div class="modal-close" id="modalClose">×</div>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const articles = {
+            setup: {
+                title: "How to Set Up Your Roome 3D System",
+                content: `
+                    <h3>What You'll Need</h3>
+                    <p>Before you begin, make sure you have:</p>
+                    <ul>
+                        <li>Your Roome 3D security system components</li>
+                        <li>A stable WiFi connection</li>
+                        <li>The Roome 3D mobile app (iOS or Android)</li>
+                        <li>Your account credentials</li>
+                    </ul>
+
+                    <h3>Step 1: Unbox and Inspect</h3>
+                    <p>Carefully unbox your system and verify all components are present and undamaged. Your package should include the main control panel, sensors, mounting hardware, and power adapters.</p>
+
+                    <h3>Step 2: Position Your Control Panel</h3>
+                    <p>Choose a central location for your control panel, preferably near your main entrance. Ensure it's within range of your WiFi router and has access to a power outlet.</p>
+
+                    <h3>Step 3: Connect to Power and WiFi</h3>
+                    <p>Plug in the control panel and follow the on-screen instructions to connect to your WiFi network. You'll need your network name and password.</p>
+
+                    <h3>Step 4: Install Sensors</h3>
+                    <p>Place sensors at entry points (doors and windows) and in key areas. Use the provided mounting hardware or adhesive strips. The app will guide you through pairing each sensor.</p>
+
+                    <h3>Step 5: Configure Your System</h3>
+                    <p>Use the mobile app to name zones, set up alert preferences, and customize your security settings. We recommend testing each sensor after installation.</p>
+
+                    <h3>Need Help?</h3>
+                    <p>If you encounter any issues during setup, our 24/7 support team is ready to assist. Call 1-707-697-9569 or use our live chat feature.</p>
+                `
+            },
+            "mobile-app": {
+                title: "Using the Roome 3D Mobile App",
+                content: `
+                    <h3>Downloading the App</h3>
+                    <p>The Roome 3D app is available for both iOS and Android devices. Search for "Roome 3D" in the App Store or Google Play Store and download the official app.</p>
+
+                    <h3>Main Dashboard</h3>
+                    <p>Your dashboard provides an at-a-glance view of your system status, including armed/disarmed status, sensor activity, and recent alerts.</p>
+
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li><strong>Live Monitoring:</strong> View real-time status of all sensors and cameras</li>
+                        <li><strong>Remote Arming:</strong> Arm or disarm your system from anywhere</li>
+                        <li><strong>Alert History:</strong> Review past events and notifications</li>
+                        <li><strong>Video Playback:</strong> Access recorded footage from your cameras</li>
+                        <li><strong>User Management:</strong> Add or remove authorized users</li>
+                    </ul>
+
+                    <h3>Notifications</h3>
+                    <p>Configure push notifications to stay informed about important events. You can customize which events trigger notifications and set quiet hours.</p>
+
+                    <h3>Emergency Features</h3>
+                    <p>The app includes a panic button for emergency situations. Pressing it will immediately alert our monitoring center and your designated emergency contacts.</p>
+                `
+            },
+            alerts: {
+                title: "Understanding Alert Notifications",
+                content: `
+                    <h3>Types of Alerts</h3>
+                    <p>Roome 3D sends different types of alerts based on system activity:</p>
+                    <ul>
+                        <li><strong>Security Alerts:</strong> Triggered by unauthorized entry or movement</li>
+                        <li><strong>System Alerts:</strong> Low battery, connectivity issues, or maintenance needs</li>
+                        <li><strong>Activity Alerts:</strong> Normal events like doors opening/closing</li>
+                        <li><strong>Custom Alerts:</strong> Personalized triggers you create</li>
+                    </ul>
+
+                    <h3>Customizing Alert Settings</h3>
+                    <p>Access alert settings in the mobile app under Settings > Notifications. You can:</p>
+                    <ul>
+                        <li>Choose which events trigger alerts</li>
+                        <li>Set priority levels for different alert types</li>
+                        <li>Configure quiet hours</li>
+                        <li>Add emergency contacts</li>
+                    </ul>
+
+                    <h3>Alert Delivery Methods</h3>
+                    <p>Receive alerts via push notification, SMS, email, or all three. We recommend enabling multiple delivery methods for critical security alerts.</p>
+
+                    <h3>Responding to Alerts</h3>
+                    <p>When you receive an alert, tap it to view details and take action. You can view camera footage, silence alarms, or contact emergency services directly from the alert.</p>
+                `
+            },
+            connectivity: {
+                title: "Troubleshooting Connectivity Issues",
+                content: `
+                    <h3>Common Connectivity Problems</h3>
+                    <p>If your system is experiencing connectivity issues, try these steps:</p>
+
+                    <h3>Check Your Internet Connection</h3>
+                    <p>Verify that your WiFi is working properly by testing other devices. Restart your router if necessary.</p>
+
+                    <h3>Verify WiFi Signal Strength</h3>
+                    <p>Ensure your control panel is within range of your router. The signal strength indicator in the app should show at least 50%.</p>
+
+                    <h3>Restart Your System</h3>
+                    <ol>
+                        <li>Unplug the control panel</li>
+                        <li>Wait 30 seconds</li>
+                        <li>Plug it back in</li>
+                        <li>Wait for the system to fully boot (2-3 minutes)</li>
+                    </ol>
+
+                    <h3>Check for Interference</h3>
+                    <p>Electronic devices, metal objects, and thick walls can interfere with wireless signals. Try repositioning your control panel or router.</p>
+
+                    <h3>Update Firmware</h3>
+                    <p>Ensure your system has the latest firmware updates installed. Check for updates in the app under Settings > System > Updates.</p>
+
+                    <h3>Still Having Issues?</h3>
+                    <p>If problems persist, contact our technical support team at 1-707-697-9569. We're available 24/7 to help resolve connectivity issues.</p>
+                `
+            },
+            battery: {
+                title: "Battery Backup and Power Management",
+                content: `
+                    <h3>Battery Backup System</h3>
+                    <p>Your Roome 3D system includes an integrated battery backup that automatically activates during power outages, ensuring continuous protection.</p>
+
+                    <h3>Battery Life</h3>
+                    <p>The backup battery typically lasts 24-48 hours on a full charge, depending on system activity and the number of connected sensors.</p>
+
+                    <h3>Battery Maintenance</h3>
+                    <ul>
+                        <li>The system automatically maintains battery health</li>
+                        <li>Replace the backup battery every 3-5 years</li>
+                        <li>Check battery status in the app monthly</li>
+                    </ul>
+
+                    <h3>Low Battery Alerts</h3>
+                    <p>You'll receive notifications when the backup battery charge drops below 20%. The system will continue to function, but we recommend addressing power issues promptly.</p>
+
+                    <h3>Sensor Batteries</h3>
+                    <p>Individual sensors use replaceable batteries that typically last 2-3 years. The app will notify you when sensor batteries need replacement.</p>
+
+                    <h3>Power Saving Mode</h3>
+                    <p>During extended outages, the system automatically enters power-saving mode to maximize battery life while maintaining core security functions.</p>
+                `
+            },
+            zones: {
+                title: "Creating and Managing Security Zones",
+                content: `
+                    <h3>What Are Security Zones?</h3>
+                    <p>Security zones allow you to group sensors and apply different security settings to different areas of your property.</p>
+
+                    <h3>Creating a New Zone</h3>
+                    <ol>
+                        <li>Open the mobile app</li>
+                        <li>Navigate to Settings > Zones</li>
+                        <li>Tap "Create New Zone"</li>
+                        <li>Name your zone (e.g., "First Floor", "Garage", "Backyard")</li>
+                        <li>Select sensors to include in this zone</li>
+                        <li>Configure zone-specific settings</li>
+                    </ol>
+
+                    <h3>Zone Types</h3>
+                    <ul>
+                        <li><strong>Entry/Exit Zones:</strong> Main doors with delay before alarm triggers</li>
+                        <li><strong>Perimeter Zones:</strong> Windows and secondary doors with instant alerts</li>
+                        <li><strong>Interior Zones:</strong> Motion sensors inside your property</li>
+                        <li><strong>24-Hour Zones:</strong> Always active regardless of system status</li>
+                    </ul>
+
+                    <h3>Zone Settings</h3>
+                    <p>Customize each zone with specific settings:</p>
+                    <ul>
+                        <li>Arm/disarm schedules</li>
+                        <li>Alert preferences</li>
+                        <li>Entry delay times</li>
+                        <li>Sensitivity levels</li>
+                    </ul>
+
+                    <h3>Best Practices</h3>
+                    <p>Create separate zones for different areas to have precise control over your security. For example, you might want your perimeter armed at night while keeping interior zones disarmed.</p>
+                `
+            }
+        };
+
+        // Article modal handling
+        const modal = document.getElementById('articleModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        document.querySelectorAll('.article-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const articleId = this.dataset.article;
+                const article = articles[articleId];
+                if (article) {
+                    modalTitle.textContent = article.title;
+                    modalBody.innerHTML = article.content;
+                    modal.classList.add('active');
+                }
+            });
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Search functionality
+        const searchBar = document.getElementById('searchBar');
+        searchBar.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.article-item').forEach(item => {
+                const title = item.querySelector('.article-title').textContent.toLowerCase();
+                const description = item.querySelector('.article-description').textContent.toLowerCase();
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Category filtering (simulated)
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const category = this.dataset.category;
+                // In a real implementation, this would filter articles by category
+                alert(`Showing articles for: ${this.querySelector('.category-title').textContent}`);
+            });
+        });
+    </script>
+</body>
+</html>
