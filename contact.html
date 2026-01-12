@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roome 3D - Contact Us</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+            background: #0f1419;
+            color: #2c2c2c;
+        }
+
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d3e50 0%, #748da4 50%, #c2caa8 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.08;
+            animation: floatShape linear infinite;
+            filter: blur(3px);
+            mix-blend-mode: overlay;
+        }
+
+        .shape-circle {
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(234, 200, 171, 0.6), transparent);
+        }
+
+        .shape-square {
+            background: radial-gradient(circle, rgba(116, 141, 164, 0.6), transparent);
+            border-radius: 10px;
+        }
+
+        @keyframes floatShape {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% { opacity: 0.08; }
+            90% { opacity: 0.08; }
+            100% {
+                transform: translateY(-150vh) rotate(360deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .wave-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(transparent, #2d3e50);
+            animation: wave 20s linear infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation: wave 15s linear infinite reverse;
+            opacity: 0.5;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        header {
+            background: rgba(45, 62, 80, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1.5rem 3rem;
+            border-bottom: 3px solid #748da4;
+            animation: slideDown 0.8s ease-out;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 100;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .logo-graphic {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover .logo-graphic {
+            color: #eac8ab;
+            transform: scale(1.02);
+        }
+
+        .logo-text {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #c2caa8;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .promo-banner {
+            background: #eac8ab;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 3px solid #748da4;
+            position: relative;
+            z-index: 99;
+        }
+
+        .promo-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2d3e50;
+            letter-spacing: 2px;
+            transition: opacity 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 8rem 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2d3e50;
+            line-height: 1.1;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #2d3e50;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .contact-form-section {
+            background: rgba(230, 240, 250, 0.95);
+            border: 2px solid #748da4;
+            border-radius: 12px;
+            padding: 3rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 200, 171, 0.3), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .contact-form-section:hover::before {
+            left: 100%;
+        }
+
+        .contact-form-section:hover {
+            border-color: #2d3e50;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        label {
+            display: block;
+            color: #2d3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(220, 235, 245, 0.8);
+            border: 2px solid #748da4;
+            border-radius: 6px;
+            color: #2d3e50;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(45, 62, 80, 0.5);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #2d3e50;
+            background: rgba(210, 230, 240, 0.95);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: #2d3e50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .submit-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .submit-btn:hover {
+            background: #1a2633;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .contact-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: rgba(230, 240, 250, 0.95);
+            border: 2px solid #748da4;
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 200, 171, 0.3), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .info-card:hover::before {
+            left: 100%;
+        }
+
+        .info-card:hover {
+            border-color: #2d3e50;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .info-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-content {
+            color: #2d3e50;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-link {
+            color: #748da4;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .info-link:hover {
+            color: #2d3e50;
+            text-decoration: underline;
+        }
+
+        .hours-list {
+            list-style: none;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid rgba(116, 141, 164, 0.3);
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .day {
+            font-weight: 600;
+            color: #2d3e50;
+        }
+
+        .time {
+            color: #748da4;
+            font-weight: 600;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 4rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .quick-link-card {
+            background: rgba(230, 240, 250, 0.95);
+            border: 2px solid #748da4;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 200, 171, 0.3), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .quick-link-card:hover::before {
+            left: 100%;
+        }
+
+        .quick-link-card:hover {
+            background: rgba(220, 235, 245, 0.95);
+            border-color: #2d3e50;
+            transform: translateY(-8px) rotate(0.5deg);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .quick-link-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quick-link-text {
+            color: #2d3e50;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .faq-section {
+            margin-top: 5rem;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2d3e50;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .faq-item {
+            background: rgba(230, 240, 250, 0.95);
+            border: 2px solid #748da4;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 200, 171, 0.3), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .faq-item:hover::before {
+            left: 100%;
+        }
+
+        .faq-item:hover {
+            border-color: #2d3e50;
+            transform: translateX(10px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .faq-answer {
+            color: #2d3e50;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-note {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(45, 62, 80, 0.9);
+            border: 2px solid #748da4;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #c2caa8;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 1.5rem;
+            }
+
+            .contact-form-section,
+            .info-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .logo-graphic {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="grain-overlay"></div>
+    <div class="floating-shapes" id="shapesContainer"></div>
+    <div class="wave-overlay">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-container">
+                <div class="logo-graphic">ROOME 3D</div>
+                <div class="logo-text">Security is No Accident</div>
+            </div>
+        </a>
+    </header>
+
+    <div class="promo-banner">
+        <div class="promo-text" id="promoText">📞 24/7 SUPPORT AVAILABLE - WE'RE HERE TO HELP</div>
+    </div>
+
+    <div class="main-content">
+        <div class="hero-section">
+            <h1>Contact Us</h1>
+            <p class="subtitle">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        </div>
+
+        <div class="contact-container">
+            <!-- Contact Form -->
+            <div class="contact-form-section">
+                <h2 class="form-title">Send Us a Message</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a topic...</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="billing">Billing Question</option>
+                            <option value="claims">File a Claim</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us how we can help you..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn"><span>Send Message</span></button>
+                </form>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-info-section">
+                <div class="info-card">
+                    <div class="info-icon">📧</div>
+                    <h3 class="info-title">Email Us</h3>
+                    <div class="info-content">
+                        Our Email: <a href="mailto:roome3d@gmail.com" class="info-link">roome3d@gmail.com</a><br>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📞</div>
+                    <h3 class="info-title">Call Us</h3>
+                    <div class="info-content">
+                        Toll-Free: <a href="tel:+17076979569" class="info-link">1-707-697-9569</a><br>
+                        <br>
+                        <strong style="color: #748da4;">Available 24/7</strong>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">🕒</div>
+                    <h3 class="info-title">Business Hours</h3>
+                    <div class="info-content">
+                        <ul class="hours-list">
+                            <li><span class="day">Monday - Friday</span> <span class="time">8:00 AM - 8:00 PM EST</span></li>
+                            <li><span class="day">Saturday</span> <span class="time">9:00 AM - 6:00 PM EST</span></li>
+                            <li><span class="day">Sunday</span> <span class="time">10:00 AM - 4:00 PM EST</span></li>
+                        </ul>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;">Emergency claims support available 24/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <div class="quick-link-card">
+                <div class="quick-link-icon">💬</div>
+                <div class="quick-link-text">Live Chat</div>
+            </div>
+
+            <div class="quick-link-card">
+                <div class="quick-link-icon">📋</div>
+                <div class="quick-link-text">File a Claim</div>
+            </div>
+
+            <div class="quick-link-card">
+                <div class="quick-link-icon">📚</div>
+                <div class="quick-link-text">Help Center</div>
+            </div>
+
+            <div class="quick-link-card">
+                <div class="quick-link-icon">📍</div>
+                <div class="quick-link-text">Find a Location</div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">How quickly will I receive a response?</div>
+                <div class="faq-answer">
+                    We aim to respond to all inquiries within 24 hours during business days. For urgent matters, please call our 24/7 support line.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What's the best way to contact you for a claim?</div>
+                <div class="faq-answer">
+                    For claims, you can either call our dedicated claims line at 1-707-697-9569, email roome3d@gmail.com, or use the "File a Claim" quick link above for the fastest service.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Do you offer support in languages other than English?</div>
+                <div class="faq-answer">
+                    Yes! We offer support in Spanish, and Mandarin. Just let us know your preferred language when you contact us.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I schedule a consultation?</div>
+                <div class="faq-answer">
+                    Absolutely! Fill out the contact form above and select "General Inquiry" or "Partnership Opportunity" to request a consultation. We'll reach out to schedule a time that works for you.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        function createShape() {
+            const shapesContainer = document.getElementById('shapesContainer');
+            const shape = document.createElement('div');
+            shape.className = 'shape';
+            
+            const shapeTypes = ['shape-circle', 'shape-square'];
+            const randomType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+            shape.classList.add(randomType);
+            
+            const size = Math.random() * 80 + 40;
+            shape.style.width = size + 'px';
+            shape.style.height = size + 'px';
+            shape.style.left = Math.random() * 100 + '%';
+            shape.style.animationDuration = (Math.random() * 25 + 20) + 's';
+            shape.style.animationDelay = Math.random() * 5 + 's';
+            
+            shapesContainer.appendChild(shape);
+            setTimeout(() => shape.remove(), 50000);
+        }
+
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createShape, i * 800);
+        }
+        setInterval(createShape, 4000);
+
+        const promoMessages = [
+            '📞 24/7 SUPPORT AVAILABLE - WE\'RE HERE TO HELP',
+            '💬 LIVE CHAT SUPPORT NOW ONLINE',
+            '⚡ AVERAGE RESPONSE TIME: UNDER 2 HOURS',
+            '🌍 MULTILINGUAL SUPPORT AVAILABLE'
+        ];
+
+        let currentPromo = 0;
+        const promoText = document.getElementById('promoText');
+
+        function rotatePromo() {
+            promoText.style.opacity = '0';
+            setTimeout(() => {
+                currentPromo = (currentPromo + 1) % promoMessages.length;
+                promoText.textContent = promoMessages[currentPromo];
+                promoText.style.opacity = '1';
+            }, 300);
+        }
+
+        setInterval(rotatePromo, 4000);
+
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show success message (in a real site, this would send the data)
+            alert('Thank you for your message! We\'ll get back to you within 24 hours.');
+            
+            // Reset form
+            this.reset();
+        });
+    </script>
+</body>
+</html>
+

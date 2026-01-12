@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roome 3D - Monthly Plans</title>
+    <meta name="description" content="Roome 3D - Flexible monthly subscriptions for every need">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+            background: #0f1419;
+            color: #2c2c2c;
+        }
+
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d3e50 0%, #748da4 50%, #c2caa8 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.08;
+            animation: floatShape linear infinite;
+            filter: blur(3px);
+            mix-blend-mode: overlay;
+        }
+
+        .shape-circle {
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(234, 200, 171, 0.6), transparent);
+        }
+
+        .shape-square {
+            background: radial-gradient(circle, rgba(116, 141, 164, 0.6), transparent);
+            border-radius: 10px;
+        }
+
+        @keyframes floatShape {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% { opacity: 0.08; }
+            90% { opacity: 0.08; }
+            100% {
+                transform: translateY(-150vh) rotate(360deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .wave-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(transparent, #2d3e50);
+            animation: wave 20s linear infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation: wave 15s linear infinite reverse;
+            opacity: 0.5;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        header {
+            background: rgba(45, 62, 80, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1.5rem 3rem;
+            border-bottom: 3px solid #748da4;
+            animation: slideDown 0.8s ease-out;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 100;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .logo-graphic {
+            font-family: 'Teko', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+            line-height: 0.9;
+        }
+
+        .logo-container:hover .logo-graphic {
+            color: #eac8ab;
+            transform: scale(1.02);
+        }
+
+        .logo-text {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #c2caa8;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .promo-banner {
+            background: #eac8ab;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 3px solid #748da4;
+            position: relative;
+            z-index: 99;
+        }
+
+        .promo-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2d3e50;
+            letter-spacing: 2px;
+            transition: opacity 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 5.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2d3e50;
+            line-height: 0.95;
+            text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.5);
+            letter-spacing: 6px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: #2d3e50;
+            margin-bottom: 3rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: transparent;
+            color: #2d3e50;
+            border: 2px solid #2d3e50;
+        }
+
+        .tab:hover, .tab.active {
+            background: #2d3e50;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .product-card {
+            background: rgba(230, 240, 250, 0.95);
+            border: 2px solid #748da4;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(234, 200, 171, 0.3), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .product-card:hover::before {
+            left: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.02) rotate(0.5deg);
+            border-color: #2d3e50;
+            box-shadow: 0 12px 40px rgba(45, 62, 80, 0.3);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #eac8ab;
+            color: #2d3e50;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .product-image {
+            width: 100%;
+            height: 280px;
+            background: rgba(220, 235, 245, 0.8);
+            border-bottom: 2px solid #748da4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Image styling */
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        /* Fallback emoji when no image */
+        .product-image .emoji-fallback {
+            font-size: 5rem;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-image .emoji-fallback {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(to top, rgba(116, 141, 164, 0.2), transparent);
+            transition: height 0.4s ease;
+            z-index: 1;
+        }
+
+        .product-card:hover .product-image::after {
+            height: 100%;
+        }
+
+        .product-content {
+            padding: 2rem;
+            background: rgba(230, 240, 250, 0.95);
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-category {
+            font-size: 0.85rem;
+            color: #748da4;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2d3e50;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .product-card:hover .product-title {
+            color: #748da4;
+        }
+
+        .product-description {
+            color: #2d3e50;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 2px solid #748da4;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2d3e50;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover .product-price {
+            transform: scale(1.1);
+            color: #748da4;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: #748da4;
+            font-weight: 400;
+        }
+
+        .btn-buy {
+            padding: 0.8rem 1.8rem;
+            background: #2d3e50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-buy::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .btn-buy:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-buy span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-buy:hover {
+            background: #1a2633;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer-note {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(45, 62, 80, 0.9);
+            border: 2px solid #748da4;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #c2caa8;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .logo-graphic { font-size: 2.5rem; }
+            .products-grid { grid-template-columns: 1fr; }
+            .filter-tabs { flex-direction: column; }
+            .tab { width: 100%; }
+            header { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="grain-overlay"></div>
+    <div class="floating-shapes" id="shapesContainer"></div>
+    <div class="wave-overlay">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-container">
+                <div class="logo-graphic">ROOME 3D</div>
+                <div class="logo-text">Security is No Accident</div>
+            </div>
+        </a>
+    </header>
+
+    <div class="promo-banner">
+        <div class="promo-text" id="promoText">🎉 15% OFF OUR 8 PIECE ROOME BUNDLE</div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Monthly Plans</h1>
+            <p class="subtitle">Flexible monthly subscriptions for every need</p>
+        </div>
+
+        <div class="filter-tabs">
+            <a href="products.html" class="tab">All Products</a>
+            <a href="monthly-plans.html" class="tab active">Monthly Plans</a>
+            <a href="yearly-plans.html" class="tab">Yearly Plans</a>
+            <a href="bundles.html" class="tab">Roome Bundles</a>
+        </div>
+
+        <div class="products-grid">
+            <!-- PRODUCT 1: Bi-Monthly Monthly Plan -->
+            <div class="product-card">
+                <div class="product-image">
+                    <!-- REPLACE WITH YOUR IMAGE URL -->
+                    <img src="c:\Users\Payten\Downloads\ChatGPT Image Jan 11, 2026, 08_08_18 PM.png" alt="Bi-Monthly Scan">
+                    <!-- If no image, uncomment the emoji fallback below -->
+                    <!-- <span class="emoji-fallback">🛋️</span> -->
+                </div>
+                <div class="product-content">
+                    <div class="product-category">Monthly Subscription</div>
+                    <div class="product-title">One 3D Scan Bi-Monthly</div>
+                    <div class="product-description">
+                        Protect your home items with our cheapest monthly subscription option. A trusted bi-monthly payment plan.
+                    </div>
+                    <div class="product-footer">
+                        <div>
+                            <span class="product-price">$13.50</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <button class="btn-buy"><span>Get Started</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 2: Bi-Weekly Monthly Plan -->
+            <div class="product-card">
+                <div class="product-image">
+                    <!-- REPLACE WITH YOUR IMAGE URL -->
+                    <img src="c:\Users\Payten\Downloads\ChatGPT Image Jan 11, 2026, 08_08_58 PM.png" alt="Bi-Weekly Scan">
+                    <!-- <span class="emoji-fallback">🍳</span> -->
+                </div>
+                <div class="product-content">
+                    <div class="product-category">Monthly Subscription</div>
+                    <div class="product-title">One 3D Scan Every Two Weeks</div>
+                    <div class="product-description">
+                        The middle of the road option for protecting your home items with bi-weekly payments.
+                    </div>
+                    <div class="product-footer">
+                        <div>
+                            <span class="product-price">$22.50</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <button class="btn-buy"><span>Get Started</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 3: Every Two Days Monthly Plan (POPULAR) -->
+            <div class="product-card">
+                <div class="product-badge">Popular</div>
+                <div class="product-image">
+                    <!-- REPLACE WITH YOUR IMAGE URL -->
+                    <img src="c:\Users\Payten\Downloads\ChatGPT Image Jan 11, 2026, 08_10_34 PM.png" alt="Two Days Scan">
+                    <!-- <span class="emoji-fallback">🛏️</span> -->
+                </div>
+                <div class="product-content">
+                    <div class="product-category">Monthly Subscription</div>
+                    <div class="product-title">One 3D Scan Every Two Days</div>
+                    <div class="product-description">
+                        Safeguard your home from more than just natural disasters with our most popular plan! Roome products protect against theft, accidental damage, and other unexpected events.
+                    </div>
+                    <div class="product-footer">
+                        <div>
+                            <span class="product-price">$30</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <button class="btn-buy"><span>Get Started</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function createShape() {
+            const shapesContainer = document.getElementById('shapesContainer');
+            const shape = document.createElement('div');
+            shape.className = 'shape';
+            
+            const shapeTypes = ['shape-circle', 'shape-square'];
+            const randomType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+            shape.classList.add(randomType);
+            
+            const size = Math.random() * 80 + 40;
+            shape.style.width = size + 'px';
+            shape.style.height = size + 'px';
+            shape.style.left = Math.random() * 100 + '%';
+            shape.style.animationDuration = (Math.random() * 25 + 20) + 's';
+            shape.style.animationDelay = Math.random() * 5 + 's';
+            
+            shapesContainer.appendChild(shape);
+            setTimeout(() => shape.remove(), 50000);
+        }
+
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createShape, i * 800);
+        }
+        setInterval(createShape, 4000);
+
+        const promoMessages = [
+            '🎉 15% OFF OUR 8 PIECE ROOME BUNDLE',
+            '✨ FREE CONSULTATION FOR NEW CUSTOMERS',
+            '🏠 SECURITY IS NO ACCIDENT',
+            '🔒 COMPREHENSIVE COVERAGE FOR YOUR HOME ITEMS',
+            '🌿 ECO-FRIENDLY PACKAGING ON ALL ORDERS'
+        ];
+
+        let currentPromo = 0;
+        const promoText = document.getElementById('promoText');
+
+        function rotatePromo() {
+            promoText.style.opacity = '0';
+            setTimeout(() => {
+                currentPromo = (currentPromo + 1) % promoMessages.length;
+                promoText.textContent = promoMessages[currentPromo];
+                promoText.style.opacity = '1';
+            }, 300);
+        }
+
+        setInterval(rotatePromo, 4000);
+    </script>
+</body>
+</html>
